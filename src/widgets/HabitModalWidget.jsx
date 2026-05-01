@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { apiClient } from '../shared/api/apiClient';
 
 function HabitModalWidget({ habit, onClose }) {
   const [stats, setStats] = useState(null);
@@ -7,7 +8,7 @@ function HabitModalWidget({ habit, onClose }) {
   useEffect(() => {
     if (!habit) return;
     setLoadingStats(true);
-    fetch(`http://localhost:8080/api/habits/${habit.id}/stats`)
+    apiClient(`/habits/${habit.id}/stats`)
       .then(res => res.json())
       .then(data => setStats(data))
       .catch(() => {})

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { apiClient } from '../shared/api/apiClient';
 
 function HabitEntitie({ habit, setSelectedHabit, setSelectedForEdit, index }) {
   const [completedToday, setCompletedToday] = useState(false);
@@ -8,7 +9,7 @@ function HabitEntitie({ habit, setSelectedHabit, setSelectedForEdit, index }) {
   const today = new Date().toISOString().split('T')[0];
 
   useEffect(() => {
-    fetch(`http://localhost:8080/api/habits/${habit.id}/check-ins`)
+    apiClient(`/habits/${habit.id}/check-ins`)
       .then(res => res.json())
       .then(checkIns => {
         const todayCheckIn = checkIns.find(c => c.checkInDate === today);
@@ -22,7 +23,7 @@ function HabitEntitie({ habit, setSelectedHabit, setSelectedForEdit, index }) {
     if (completedToday || isChecking) return;
     setIsChecking(true);
     try {
-      const res = await fetch(`http://localhost:8080/api/habits/${habit.id}/check-ins`, {
+      const res = await apiClient(`/habits/${habit.id}/check-ins`, {
         method: 'POST',
       });
       if (res.ok) setCompletedToday(true);

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { apiClient } from '../shared/api/apiClient';
 
 function EditHabitFeature({ habit, onSuccess, onClose, onArchived }) {
   const [title, setTitle] = useState(habit.title);
@@ -17,7 +18,7 @@ function EditHabitFeature({ habit, onSuccess, onClose, onArchived }) {
     setError('');
 
     try {
-      const res = await fetch(`http://localhost:8080/api/habits/${habit.id}`, {
+      const res = await apiClient(`/habits/${habit.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ title: title.trim(), description: description.trim() }),
@@ -42,7 +43,7 @@ function EditHabitFeature({ habit, onSuccess, onClose, onArchived }) {
     setError('');
 
     try {
-      const res = await fetch(`http://localhost:8080/api/habits/${habit.id}`, {
+      const res = await apiClient(`/habits/${habit.id}`, {
         method: 'DELETE',
       });
 

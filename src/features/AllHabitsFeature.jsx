@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { apiClient } from '../shared/api/apiClient';
 import HabitEntitie from '../entities/HabitEntitie';
 import EditHabitWidget from '../widgets/EditHabitWidget';
 
@@ -6,7 +7,7 @@ function AllHabitsFeature({ habits, setHabits, isLoading, setIsLoading, setSelec
   const [selectedForEdit, setSelectedForEdit] = useState(null); // ← new
 
   useEffect(() => {
-    fetch("http://localhost:8080/api/habits")
+    apiClient('/habits')
       .then(res => res.json())
       .then(data => setHabits(data))
       .then(() => setIsLoading(false));

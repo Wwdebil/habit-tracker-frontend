@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { apiClient } from '../shared/api/apiClient';
 
 function AddHabitFeature({ onSuccess, onClose }) {
   const [title, setTitle] = useState('');
@@ -17,7 +18,7 @@ function AddHabitFeature({ onSuccess, onClose }) {
     setError('');
 
     try {
-      const res = await fetch('http://localhost:8080/api/habits', {
+      const res = await apiClient('/habits', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ title: title.trim(), description: description.trim() }),
