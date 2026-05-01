@@ -1,13 +1,20 @@
+# Берём Node (лучше LTS, а не 24)
 FROM node:20-alpine
 
+# Рабочая папка
 WORKDIR /app
 
-COPY package.json package-lock.json ./
+# Копируем package.json
+COPY package*.json ./
 
+# Устанавливаем зависимости
 RUN npm install
 
+# Копируем весь проект
 COPY . .
 
+# Открываем порт Vite
 EXPOSE 5173
 
+# Важно для работы в Docker
 CMD ["npm", "run", "dev", "--", "--host"]
