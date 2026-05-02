@@ -29,6 +29,12 @@ function EditHabitFeature({ habit, onSuccess, onClose, onArchived }) {
     setIsArchiving(true);
     setError('');
     try {
+      // Сначала сохраняем изменения
+      await apiClient(`/habits/${habit.id}`, {
+        method: 'PUT',
+        body: JSON.stringify({ title: title.trim(), description: description.trim() }),
+      });
+      // Потом архивируем
       await apiClient(`/habits/${habit.id}`, { method: 'DELETE' });
       onArchived();
     } catch (e) {
