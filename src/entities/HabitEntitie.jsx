@@ -10,7 +10,6 @@ function HabitEntitie({ habit, setSelectedHabit, setSelectedForEdit, index }) {
 
   useEffect(() => {
     apiClient(`/habits/${habit.id}/check-ins`)
-      .then(res => res.json())
       .then(checkIns => {
         const todayCheckIn = checkIns.find(c => c.checkInDate === today);
         if (todayCheckIn) setCompletedToday(true);
@@ -23,10 +22,8 @@ function HabitEntitie({ habit, setSelectedHabit, setSelectedForEdit, index }) {
     if (completedToday || isChecking) return;
     setIsChecking(true);
     try {
-      const res = await apiClient(`/habits/${habit.id}/check-ins`, {
-        method: 'POST',
-      });
-      if (res.ok) setCompletedToday(true);
+      await apiClient(`/habits/${habit.id}/check-ins`, { method: 'POST' });
+      setCompletedToday(true);
     } catch (e) {}
     finally { setIsChecking(false); }
   };
@@ -40,15 +37,11 @@ function HabitEntitie({ habit, setSelectedHabit, setSelectedForEdit, index }) {
       <div className={`border rounded-2xl px-7 py-6 flex items-center gap-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 ${
         completedToday ? 'bg-blue-50 border-blue-200' : 'bg-white border-slate-200'
       }`}>
-
-        {/* Checkbox */}
         <button
           onClick={handleCheck}
           disabled={completedToday || isChecking || loadingCheckIn}
           className={`flex-shrink-0 w-7 h-7 rounded-full border-2 flex items-center justify-center transition-all duration-200 ${
-            completedToday
-              ? 'bg-blue-600 border-blue-600 cursor-default'
-              : 'border-slate-300 hover:border-blue-400 cursor-pointer'
+            completedToday ? 'bg-blue-600 border-blue-600 cursor-default' : 'border-slate-300 hover:border-blue-400 cursor-pointer'
           }`}
         >
           {isChecking || loadingCheckIn ? (
@@ -60,7 +53,6 @@ function HabitEntitie({ habit, setSelectedHabit, setSelectedForEdit, index }) {
           ) : null}
         </button>
 
-        {/* Content */}
         <div className="flex-1 min-w-0">
           <p className={`font-semibold text-lg mb-1 truncate transition-colors duration-200 ${
             completedToday ? 'text-blue-700' : 'text-slate-900'
@@ -80,7 +72,6 @@ function HabitEntitie({ habit, setSelectedHabit, setSelectedForEdit, index }) {
           </div>
         </div>
 
-        {/* Buttons */}
         <div className="flex items-center gap-2 flex-shrink-0">
           <button
             onClick={() => setSelectedForEdit(habit)}

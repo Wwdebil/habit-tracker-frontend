@@ -4,13 +4,13 @@ import HabitEntitie from '../entities/HabitEntitie';
 import EditHabitWidget from '../widgets/EditHabitWidget';
 
 function AllHabitsFeature({ habits, setHabits, isLoading, setIsLoading, setSelectedHabit, onHabitUpdated }) {
-  const [selectedForEdit, setSelectedForEdit] = useState(null); // ← new
+  const [selectedForEdit, setSelectedForEdit] = useState(null);
 
   useEffect(() => {
     apiClient('/habits')
-      .then(res => res.json())
       .then(data => setHabits(data))
-      .then(() => setIsLoading(false));
+      .then(() => setIsLoading(false))
+      .catch(() => setIsLoading(false));
   }, []);
 
   if (isLoading) return (
@@ -35,25 +35,17 @@ function AllHabitsFeature({ habits, setHabits, isLoading, setIsLoading, setSelec
             key={habit.id}
             habit={habit}
             setSelectedHabit={setSelectedHabit}
-            setSelectedForEdit={setSelectedForEdit} // ← pass setter down
+            setSelectedForEdit={setSelectedForEdit}
             index={i}
           />
         ))}
       </ul>
-
-      {/* Modal lives here, outside the list — same pattern as HabitModalWidget */}
       {selectedForEdit && (
         <EditHabitWidget
           habit={selectedForEdit}
           onClose={() => setSelectedForEdit(null)}
-          onSuccess={() => {
-            setSelectedForEdit(null);
-            onHabitUpdated();
-          }}
-          onArchived={() => {
-            setSelectedForEdit(null);
-            onHabitUpdated();
-          }}
+          onSuccess={() => { setSelectedForEdit(null); onHabitUpdated(); }}
+          onArchived={() => { setSelectedForEdit(null); onHabitUpdated(); }}
         />
       )}
     </>

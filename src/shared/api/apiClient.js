@@ -18,7 +18,9 @@ export const apiClient = async (endpoint, options = {}) => {
     return;
   }
 
-  const data = await res.json();
+  const text = await res.text();
+  const data = text ? JSON.parse(text) : {};
+
   if (!res.ok) throw new Error(data.message || 'Something went wrong');
   return data;
 };
